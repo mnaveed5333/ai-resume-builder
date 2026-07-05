@@ -121,10 +121,13 @@ export default function BuilderPage() {
     return data;
   };
 
+  // Save now saves AND takes the user straight to the preview page,
+  // matching what "Preview" already did — one action, one destination.
   const handleSave = async () => {
     setSaving(true);
     try {
       await saveResume();
+      router.push(`/preview/${id}`);
     } catch (err) {
       alert(err.message || "Something went wrong saving your resume");
     } finally {
