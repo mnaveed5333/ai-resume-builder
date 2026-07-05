@@ -58,6 +58,12 @@ export default function PreviewPage() {
         import("jspdf"),
       ]);
 
+      // Ensure all fonts are fully loaded before capture, otherwise
+      // html2canvas can snapshot mid-layout and shift/overlap text.
+      if (document.fonts && document.fonts.ready) {
+        await document.fonts.ready;
+      }
+
       const element = resumeRef.current;
 
       const canvas = await html2canvas(element, {
@@ -488,7 +494,7 @@ function CustomSections({ resume, variant }) {
 }
 
 /* ============================================================
-   TEMPLATE 1 — ONYX (unchanged)
+   TEMPLATE 1 — ONYX (skills pill spacing fixed for PDF export)
 ============================================================ */
 function OnyxTemplate({ resume }) {
   const initial = resume.personalInfo?.fullName?.trim()?.[0]?.toUpperCase() || "R";
@@ -522,9 +528,9 @@ function OnyxTemplate({ resume }) {
             <h2 className="flex items-center gap-2 text-[13pt] font-bold tracking-[0.18em] uppercase text-amber-200 mb-3">
               <span className="w-1.5 h-1.5 bg-amber-500 rotate-45 inline-block" />Skills
             </h2>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap -mr-2 -mb-2">
               {resume.skills.map((skill, i) => (
-                <span key={i} className="text-[11pt] font-medium px-2.5 py-1 border border-amber-500/50 text-amber-100 rounded-full bg-amber-500/10">{skill}</span>
+                <span key={i} className="text-[11pt] font-medium px-2.5 py-1 border border-amber-500/50 text-amber-100 rounded-full bg-amber-500/10 mr-2 mb-2">{skill}</span>
               ))}
             </div>
           </div>
@@ -632,7 +638,7 @@ function OnyxTemplate({ resume }) {
 }
 
 /* ============================================================
-   TEMPLATE 2 — SLATE (unchanged)
+   TEMPLATE 2 — SLATE (skills pill spacing fixed for PDF export)
 ============================================================ */
 function SlateTemplate({ resume }) {
   const contactLine = [resume.personalInfo?.email, resume.personalInfo?.phone, resume.personalInfo?.location, resume.personalInfo?.linkedin, resume.personalInfo?.website].filter(Boolean).join("   ·   ");
@@ -682,8 +688,8 @@ function SlateTemplate({ resume }) {
       {resume.skills?.length > 0 && (
         <section className="mb-8">
           <h2 className="text-[13pt] font-bold tracking-[0.16em] uppercase text-slate-700 mb-3 pb-2 border-b-[1.5px] border-gray-200">Skills</h2>
-          <div className="flex flex-wrap gap-2">
-            {resume.skills.map((skill, i) => <span key={i} className="text-[11pt] font-medium px-3 py-1.5 bg-gray-100 border border-gray-200 rounded-md text-slate-700">{skill}</span>)}
+          <div className="flex flex-wrap -mr-2 -mb-2">
+            {resume.skills.map((skill, i) => <span key={i} className="text-[11pt] font-medium px-3 py-1.5 bg-gray-100 border border-gray-200 rounded-md text-slate-700 mr-2 mb-2">{skill}</span>)}
           </div>
         </section>
       )}
@@ -727,7 +733,7 @@ function SlateTemplate({ resume }) {
 }
 
 /* ============================================================
-   TEMPLATE 3 — STUDIO (unchanged)
+   TEMPLATE 3 — STUDIO (skills pill spacing fixed for PDF export)
 ============================================================ */
 function StudioTemplate({ resume }) {
   const initial = resume.personalInfo?.fullName?.trim()?.[0]?.toUpperCase() || "R";
@@ -753,7 +759,7 @@ function StudioTemplate({ resume }) {
         {resume.summary && <section className="mb-8"><h2 className="flex items-center gap-2 font-bold text-[13pt] text-violet-950 mb-3"><span className="w-2 h-2 rounded-full bg-gradient-to-r from-violet-600 to-pink-600" />About</h2><p className="text-[13pt] leading-relaxed text-violet-900/90">{resume.summary}</p></section>}
         {resume.skills?.length > 0 && (
           <section className="mb-8"><h2 className="flex items-center gap-2 font-bold text-[13pt] text-violet-950 mb-3"><span className="w-2 h-2 rounded-full bg-gradient-to-r from-violet-600 to-pink-600" />Skills</h2>
-            <div className="flex flex-wrap gap-2">{resume.skills.map((skill, i) => <span key={i} className={`text-[11pt] font-semibold px-3 py-1.5 rounded-full text-white shadow-md ${chipGradients[i % 4]}`}>{skill}</span>)}</div>
+            <div className="flex flex-wrap -mr-2 -mb-2">{resume.skills.map((skill, i) => <span key={i} className={`text-[11pt] font-semibold px-3 py-1.5 rounded-full text-white shadow-md mr-2 mb-2 ${chipGradients[i % 4]}`}>{skill}</span>)}</div>
           </section>
         )}
         {resume.experience?.length > 0 && (
@@ -805,7 +811,7 @@ function StudioTemplate({ resume }) {
 }
 
 /* ============================================================
-   TEMPLATE 4 — NOVA (unchanged)
+   TEMPLATE 4 — NOVA (skills pill spacing fixed for PDF export)
 ============================================================ */
 function NovaTemplate({ resume }) {
   const initial = resume.personalInfo?.fullName?.trim()?.[0]?.toUpperCase() || "R";
@@ -828,7 +834,7 @@ function NovaTemplate({ resume }) {
         {resume.summary && <section className="mb-6 bg-white rounded-xl border border-emerald-100 p-5 shadow-sm"><h2 className="text-[13pt] font-bold uppercase tracking-widest text-emerald-700 mb-2">Summary</h2><p className="text-[13pt] leading-relaxed text-neutral-700">{resume.summary}</p></section>}
         {resume.skills?.length > 0 && (
           <section className="mb-6"><h2 className="text-[13pt] font-bold uppercase tracking-widest text-emerald-700 mb-3">Skills</h2>
-            <div className="flex flex-wrap gap-2">{resume.skills.map((skill, i) => <span key={i} className="text-[11pt] font-semibold px-3 py-1.5 bg-white border border-emerald-200 text-emerald-700 rounded-lg">{skill}</span>)}</div>
+            <div className="flex flex-wrap -mr-2 -mb-2">{resume.skills.map((skill, i) => <span key={i} className="text-[11pt] font-semibold px-3 py-1.5 bg-white border border-emerald-200 text-emerald-700 rounded-lg mr-2 mb-2">{skill}</span>)}</div>
           </section>
         )}
         {resume.experience?.length > 0 && (
@@ -886,7 +892,7 @@ function NovaTemplate({ resume }) {
 }
 
 /* ============================================================
-   TEMPLATE 5 — IVORY (unchanged)
+   TEMPLATE 5 — IVORY (unchanged — no pill-style skills list)
 ============================================================ */
 function IvoryTemplate({ resume }) {
   return (
@@ -961,7 +967,7 @@ function IvoryTemplate({ resume }) {
 }
 
 /* ============================================================
-   TEMPLATE 6 — AURORA (unchanged)
+   TEMPLATE 6 — AURORA (skills pill spacing fixed for PDF export)
 ============================================================ */
 function AuroraTemplate({ resume }) {
   const initial = resume.personalInfo?.fullName?.trim()?.[0]?.toUpperCase() || "R";
@@ -992,9 +998,9 @@ function AuroraTemplate({ resume }) {
       {resume.skills?.length > 0 && (
         <section className="mb-6">
           <h2 className="text-[13pt] font-bold uppercase tracking-widest text-violet-500 mb-3">Skills</h2>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap -mr-2 -mb-2">
             {resume.skills.map((skill, i) => (
-              <span key={i} className="text-[11pt] font-semibold px-3.5 py-1.5 bg-white/80 border border-pink-200 text-pink-600 rounded-full shadow-sm">{skill}</span>
+              <span key={i} className="text-[11pt] font-semibold px-3.5 py-1.5 bg-white/80 border border-pink-200 text-pink-600 rounded-full shadow-sm mr-2 mb-2">{skill}</span>
             ))}
           </div>
         </section>
@@ -1081,7 +1087,7 @@ function AuroraTemplate({ resume }) {
 }
 
 /* ============================================================
-   TEMPLATE 7 — LEDGER (unchanged)
+   TEMPLATE 7 — LEDGER (unchanged — no pill-style skills list)
 ============================================================ */
 function LedgerTemplate({ resume }) {
   return (
@@ -1183,7 +1189,7 @@ function LedgerTemplate({ resume }) {
 }
 
 /* ============================================================
-   TEMPLATE 8 — PULSE (unchanged)
+   TEMPLATE 8 — PULSE (skills pill spacing fixed for PDF export)
 ============================================================ */
 function PulseTemplate({ resume }) {
   const initial = resume.personalInfo?.fullName?.trim()?.[0]?.toUpperCase() || "R";
@@ -1222,9 +1228,9 @@ function PulseTemplate({ resume }) {
         {resume.skills?.length > 0 && (
           <section className="mb-7">
             <h2 className="text-[13pt] font-black uppercase tracking-[0.2em] text-red-500 mb-3">Skills</h2>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap -mr-2 -mb-2">
               {resume.skills.map((skill, i) => (
-                <span key={i} className="text-[11pt] font-bold px-3 py-1.5 bg-neutral-800 border border-red-600/40 text-neutral-100 rounded">{skill}</span>
+                <span key={i} className="text-[11pt] font-bold px-3 py-1.5 bg-neutral-800 border border-red-600/40 text-neutral-100 rounded mr-2 mb-2">{skill}</span>
               ))}
             </div>
           </section>
@@ -1305,7 +1311,7 @@ function PulseTemplate({ resume }) {
 }
 
 /* ============================================================
-   TEMPLATE 9 — BOTANICA (unchanged)
+   TEMPLATE 9 — BOTANICA (skills pill spacing fixed for PDF export)
 ============================================================ */
 function BotanicaTemplate({ resume }) {
   const initial = resume.personalInfo?.fullName?.trim()?.[0]?.toUpperCase() || "R";
@@ -1340,9 +1346,9 @@ function BotanicaTemplate({ resume }) {
           <h2 className="flex items-center gap-2 text-[13pt] font-bold uppercase tracking-widest text-emerald-700 mb-3">
             <span>🌿</span>Skills
           </h2>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap -mr-2 -mb-2">
             {resume.skills.map((skill, i) => (
-              <span key={i} className="text-[11pt] font-medium px-3 py-1.5 bg-white border border-emerald-200 text-emerald-800 rounded-full">{skill}</span>
+              <span key={i} className="text-[11pt] font-medium px-3 py-1.5 bg-white border border-emerald-200 text-emerald-800 rounded-full mr-2 mb-2">{skill}</span>
             ))}
           </div>
         </section>
@@ -1433,7 +1439,7 @@ function BotanicaTemplate({ resume }) {
 }
 
 /* ============================================================
-   TEMPLATE 10 — METRO (unchanged)
+   TEMPLATE 10 — METRO (skills pill spacing fixed for PDF export)
 ============================================================ */
 function MetroTemplate({ resume }) {
   return (
@@ -1491,8 +1497,8 @@ function MetroTemplate({ resume }) {
           {resume.skills?.length > 0 && (
             <div className="border border-blue-200 rounded-lg p-4">
               <h2 className="text-[13pt] font-bold uppercase tracking-widest text-blue-900 mb-2 pb-1 border-b border-blue-200">Skills</h2>
-              <div className="flex flex-wrap gap-1.5">
-                {resume.skills.map((skill, i) => <span key={i} className="text-[11pt] font-medium px-2.5 py-1 bg-blue-50 border border-blue-200 text-blue-800 rounded">{skill}</span>)}
+              <div className="flex flex-wrap -mr-1.5 -mb-1.5">
+                {resume.skills.map((skill, i) => <span key={i} className="text-[11pt] font-medium px-2.5 py-1 bg-blue-50 border border-blue-200 text-blue-800 rounded mr-1.5 mb-1.5">{skill}</span>)}
               </div>
             </div>
           )}
